@@ -330,3 +330,10 @@
     top: 20px;
 }
 
+.prompt{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}

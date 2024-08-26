@@ -5,6 +5,7 @@ import { Link } from "react-router-dom"
 import { DNA } from 'react-loader-spinner'
 
 import { ToastContainer, toast } from "react-toastify"
+import Modal from "./Modal"
 
 export default function Author(props) {
 
@@ -16,6 +17,8 @@ export default function Author(props) {
   const [blog, setBlog] = useState([])
 
   const [coverImage, setCoverImage] = useState(null)
+
+  const [deleted,setDeleteData] = useState(null)
 
   useLayoutEffect(() => {
     setLoading(true)
@@ -72,21 +75,9 @@ export default function Author(props) {
   }
 
 
-  function deleteBlog(id) {
-    try {
-      axios.delete(`http://localhost:8081/blogs/deleteData/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }).then((value) => {
-        console.log(value);
-        toast.success("Blog deleted successfully !")
-      })
-    } catch (error) {
-      toast.error(`Error is ${error}`)
-    }
+  function getDeleteData(id) {
+     setDeleteData(id)
   }
-
 
   return (
     <>
@@ -138,10 +129,13 @@ export default function Author(props) {
                           <img src={`http://localhost:8081/uploads/blogs/${value.coverImage}`} alt={`${value.coverImage}`} style={{height : "70px",width : "220px"}}/>
                           <h5 className="card-title">{value.title.slice(0, 30)}.....</h5>
                           <p className="card-text">{value.description.slice(0, 70)}.....</p>
-                          <a href="#" className="btn btn-danger delete" onClick={() => { return deleteBlog(value._id) }}>Delete Blog</a>
+                          <a href="#" className="btn btn-danger delete"  data-toggle="modal" data-target=".bd-example-modal-lg" onClick={()=>{getDeleteData(value._id)}}>Delete Blog</a>
                           <Link to={`/updateBlog/blogs/${value._id}`} className="btn btn-success ml-3 update">Update Blog</Link>
                         </div>
                       </div>
+
+
+                      <Modal deleted={deleted} />
                     </>
                   )
                 })
